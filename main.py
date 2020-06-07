@@ -5,10 +5,14 @@ import numpy as np
 data, labels = data_set.load_data("data\\agaricus-lepiota.data")
 
 # data_set.display_data(data, 10, [i for i in range(23)])
+f = 0.1
+f = float(input("Podaj rozmia zbioru treningowego (float): "))
 
-training_data_length = int(len(data) * 0.05)    # 0.5% of data is training data
+training_data_length = int(len(data) * f)    # 0.5% of data is training data
 
-k = 10;     #numer of repeats
+
+k = 1;     #numer of repeats
+k = int(input("Podaj ilość testów (int): "))
 
 while(k>0):
 
