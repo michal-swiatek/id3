@@ -9,9 +9,10 @@ training_data_length = int(len(data) * 0.75)    # 75% of data is training data
 training_data = data[:training_data_length, 1:]
 training_labels = data[:training_data_length, 0]
 
-id3_tree = id3.build_tree(training_labels, training_data)
+id3_tree = id3.build_tree(training_labels, training_data, variation="roulette")
 
-tree_labels = data_set.mushrooms_labels()
+# tree_labels = data_set.mushrooms_labels()
+tree_labels = None
 
 id3_tree.print(tree_labels)
 
