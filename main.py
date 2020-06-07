@@ -4,6 +4,9 @@ import numpy as np
 
 data, labels = data_set.load_data("data\\agaricus-lepiota.data")
 
+
+include_debug_info = input("Include debug info? (y/n): ")
+
 #tree display prompt
 display_trees = input("Display trees? (y/n): ")
 id3_type = input("Algorytm zwykły czy z ruletką? (regular/roulette): ")
@@ -43,6 +46,8 @@ while(k>0):
             correct_cases += 1
         all_cases += 1
 
-    print("Accuracy over {} cases: {:.2f}%".format(all_cases, correct_cases / all_cases * 100))
-
+    if(include_debug_info == "y"):
+        print("Accuracy over {} cases: {:.2f}%".format(all_cases, correct_cases / all_cases * 100))
+    else:
+        print("{:.2f}".format((correct_cases / all_cases * 100)))
     k = k -1
