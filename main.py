@@ -4,7 +4,7 @@ import numpy as np
 
 data, labels = data_set.load_data("data\\agaricus-lepiota.data")
 
-#tree display prompt
+# tree display prompt
 display_trees = input("Display trees? (y/n): ")
 id3_type = input("Algorytm zwykły czy z ruletką? (regular/roulette): ")
 
@@ -38,11 +38,15 @@ while(k>0):
 
     correct_cases = 0
     all_cases = 0
+    not_classified = 0
     for validation_case in validation_data:
-        if validation_case[0] == id3_tree.classify(validation_case[1:]):
+        validation = id3_tree.classify(validation_case[1:])
+        if validation == validation_case[0]:
             correct_cases += 1
+        elif validation == "Cannot classify":
+            not_classified += 1
         all_cases += 1
 
-    print("Accuracy over {} cases: {:.2f}%".format(all_cases, correct_cases / all_cases * 100))
+    print("Accuracy over {} cases: {:.2f}%, not classified: {}".format(all_cases, correct_cases / all_cases * 100, not_classified))
 
     k = k -1
