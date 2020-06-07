@@ -4,7 +4,7 @@ import numpy as np
 
 def load_data(path, labels=False):
     """
-        Loads data
+        Loads data from .csv file
 
     :param path: path to formatted data text file
     :param labels: specifies if file defines labels in first line

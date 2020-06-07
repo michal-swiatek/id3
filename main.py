@@ -9,9 +9,7 @@ training_data_length = int(len(data) * 0.75)    # 75% of data is training data
 training_data = data[:training_data_length, 1:]
 training_labels = data[:training_data_length, 0]
 
-# id3_tree = id3.id3(0, [5], data[:, :])
-id3_tree = id3.id3(training_labels, [i for i in range(22)], training_data)
-id3_tree = id3.ID3Tree(id3_tree)
+id3_tree = id3.build_tree(training_labels, training_data)
 
 id3_tree.print()
 

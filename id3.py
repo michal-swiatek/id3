@@ -14,16 +14,21 @@ class ID3Tree:
     def __init__(self, root=None):
         self.root = root
 
-    def print_implementation(self, node, tabs=0):
-        print('|  ' * tabs, '+--', node.label, " (", sep='', end='')
+    def print(self, node=None, tabs=0):
+        if node is None:
+            node = self.root
+
+        # Consistency with data description
+        label = node.label
+        if type(label) is int:
+            label += 1
+
+        print('|  ' * tabs, '+--', label, " (", sep='', end='')
         print(*node.branches.keys(), sep=',', end='')
         print(')')
 
         for branch in node.branches.values():
-            self.print_implementation(branch, tabs + 1)
-
-    def print(self):
-        self.print_implementation(self.root)
+            self.print(branch, tabs + 1)
 
     def classify(self, case, node=None):
         if node is None:
@@ -32,10 +37,9 @@ class ID3Tree:
         if len(node.branches) == 0:
             return node.label
         else:
-            if case[node.label - 1] in node.branches:
-                return self.classify(case, node.branches[case[node.label - 1]])
+            if case[node.label] in node.branches:
+                return self.classify(case, node.branches[case[node.label]])
             else:
-                # return self.classify(case, np.random.choice([*node.branches.values()]))
                 return "Cannot classify"
 
 
@@ -114,7 +118,7 @@ def id3(labels, attributes, data):
             best_inf_gain = inf_gain
 
     attributes.remove(best_attribute)
-    root = TreeNode(best_attribute + 1)
+    root = TreeNode(best_attribute)
 
     for attribute_value in best_attribute_values:
         data_subset_indices = np.argwhere(data[:, best_attribute] == attribute_value)
@@ -127,12 +131,21 @@ def id3(labels, attributes, data):
     return root
 
 
-def build_tree(training_data, attribute_labels=None):
+def build_tree(training_labels, training_data, variation="regular"):
     """
-        Builds an ID3 Tree from training data
+        Builds an ID3 Tree from training data. Index 0 should contain
 
-    :param training_data:       data set formatted as 2 dimensional array [[case1], [case2], [case3]...]
-    :param attribute_labels:    dictionary of labels corresponding to attribute index (eg. {1: "Outlook"})
+    :param training_labels: list of final classification for training data
+    :param training_data: data set formatted as 2 dimensional array [[case1], [case2], [case3]...]
+    :param variation: variation of algorithm (regular for standard id3, roulette for roulette wheel based)
     :return: ID3Tree instance
     """
 
+    root = None
+    attributes = [i for i in range(len(training_data[0]))]
+
+    if variation == "regular":
+        root = id3(training_labels, attributes, training_data)
+
+    tree = ID3Tree(root)
+    return tree
