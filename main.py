@@ -11,7 +11,9 @@ training_labels = data[:training_data_length, 0]
 
 id3_tree = id3.build_tree(training_labels, training_data)
 
-id3_tree.print()
+tree_labels = data_set.mushrooms_labels()
+
+id3_tree.print(tree_labels)
 
 validation_data = data[training_data_length:, :]
 if len(validation_data) == 0:

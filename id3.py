@@ -14,21 +14,50 @@ class ID3Tree:
     def __init__(self, root=None):
         self.root = root
 
-    def print(self, node=None, tabs=0):
+    def print(self, labels=None, node=None, tabs=0):
+        """
+            Prints whole tree in horizontal form
+            If labels are specified they are used to replace node/leaf/branch name only in visualization
+            Inner names stays the same for implementation reasons
+            Labels should be formatted as dictionary of dictionaries, where first dict refers to node/leaf name
+            and second dict contains branches names, special key "label" is used to name node/leaf in second
+            dictionary, example:
+            labels = {'p': {"label": "poisonous"...}, 4: {"label": odor, 'a': "almond", 'n': "none"...}...}
+
+        :param labels: dictionary of dictionaries of names corresponding to nodes and barnches
+        :param node: Don't specify
+        :param tabs: Don't specify
+        :return: None
+        """
+        if labels is None:
+            labels = {}
+
         if node is None:
             node = self.root
 
-        # Consistency with data description
         label = node.label
-        if type(label) is int:
-            label += 1
+        # Change label name if specified in dict
+        if node.label in labels:
+            label = labels[node.label]["label"]
 
-        print('|  ' * tabs, '+--', label, " (", sep='', end='')
-        print(*node.branches.keys(), sep=',', end='')
+        print('|   ' * tabs, '+---', label, " (", sep='', end='')
+
+        # Print branches
+        if node.label in labels:
+            branches = []
+            for branch in node.branches.keys():
+                if branch in labels[node.label]:
+                    branches.append(labels[node.label][branch])
+                else:
+                    branches.append(branch)
+            print(*branches, sep=',', end='')
+        else:
+            print(*node.branches.keys(), sep=',', end='')
+
         print(')')
 
         for branch in node.branches.values():
-            self.print(branch, tabs + 1)
+            self.print(labels, branch, tabs + 1)
 
     def classify(self, case, node=None):
         if node is None:
